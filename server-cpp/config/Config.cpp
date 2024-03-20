@@ -1,8 +1,23 @@
 #include "Config.h"
 
 Config::Config(){
+    // 服务器 ip 地址，默认172.27.169.171 
+    serverIpAddr = "172.27.169.171";
+
     // 端口号，默认9006
     PORT = 9006;
+
+    // 数据库 ip 地址，默认172.27.169.171
+    databaseIpAddr = "172.27.169.171";
+
+    // 数据库用户名
+    databaseUserName = "root";
+
+    // 数据库密码
+    databasePassword = "123456";
+
+    // 数据库名
+    databaseName = "server";
 
     // 日志写入方式，默认同步
     LOGWrite = 0;
@@ -34,11 +49,36 @@ Config::Config(){
 
 void Config::parse_arg(int argc, char*argv[]){
     int opt;
-    const char *str = "p:l:m:o:s:t:c:a:";
+    const char *str = "p:l:m:o:s:t:c:a:i:I:U:P:N:";
     while ((opt = getopt(argc, argv, str)) != -1)
     {
         switch (opt)
         {
+        case 'U':
+        {
+            databaseUserName = optarg;
+            break;
+        }
+        case 'P':
+        {
+            databasePassword = optarg;
+            break;
+        }
+        case 'N':
+        {
+            databaseName = optarg;
+            break;
+        }
+        case 'I':
+        {
+            databaseIpAddr = optarg;
+            break;
+        }
+        case 'i':
+        {
+            serverIpAddr = optarg;
+            break;
+        }
         case 'p':
         {
             PORT = atoi(optarg);

@@ -13,8 +13,23 @@ public:
 
     void parse_arg(int argc, char*argv[]);
 
+    // 服务器 ip 地址
+    string serverIpAddr;
+
     // 端口号
     int PORT;
+
+    // 数据库 ip 地址
+    string databaseIpAddr;
+
+    // 数据库用户名
+    string databaseUserName;
+
+    // 数据库密码
+    string databasePassword;
+
+    // 数据库名
+    string databaseName;
 
     // 日志写入方式
     int LOGWrite;

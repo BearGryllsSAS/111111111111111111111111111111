@@ -1,4 +1,6 @@
 #include "Server.h"
+#include <iostream>
+using namespace std;
 
 // 构造函数
 Server::Server()
@@ -23,10 +25,12 @@ Server::~Server()
 }
 
 // 初始化服务器配置参数
-void Server::init(int port, string user, string passWord, string databaseName, int log_write, 
+void Server::init(string serverIpAddr, int port, string databaseIpAddr, string user, string passWord, string databaseName, int log_write, 
                      int opt_linger, int trigmode, int sql_num, int thread_num, int close_log, int actor_model)
 {
+    m_serverIpAddr = serverIpAddr;
     m_port = port;
+    m_databaseIpAddr = databaseIpAddr;
     m_user = user;
     m_passWord = passWord;
     m_databaseName = databaseName;
@@ -75,9 +79,9 @@ void Server::log_write()
     {
         // 初始化日志
         if (1 == m_log_write)
-            Log::get_instance()->init("./ServerLog", m_close_log, 2000, 800000, 800);
+            Log::get_instance()->init("ServerLog", m_close_log, 2000, 800000, 800);
         else
-            Log::get_instance()->init("./ServerLog", m_close_log, 2000, 800000, 0);
+            Log::get_instance()->init("ServerLog", m_close_log, 2000, 800000, 0);
     }
 }
 
@@ -86,7 +90,7 @@ void Server::sql_pool()
 {
     // 初始化数据库连接池
     m_connPool = ConnectionPool::GetInstance();
-    m_connPool->init("8.138.96.21", m_user, m_passWord, m_databaseName, 3306, m_sql_num, m_close_log);
+    m_connPool->init(m_databaseIpAddr, m_user, m_passWord, m_databaseName, 3306, m_sql_num, m_close_log);
 
     // 初始化数据库读取表
     users->initmysql_result(m_connPool);
@@ -121,7 +125,7 @@ void Server::eventListen()
     struct sockaddr_in address;
     bzero(&address, sizeof(address));
     address.sin_family = AF_INET;
-    address.sin_addr.s_addr = htonl(INADDR_ANY);
+    inet_pton(AF_INET, m_serverIpAddr.c_str(), &address.sin_addr);
     address.sin_port = htons(m_port);
 
     int flag = 1;

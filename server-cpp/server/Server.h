@@ -22,7 +22,7 @@ public:
     Server();
     ~Server();
 
-    void init(int port , string user, string passWord, string databaseName,
+    void init(string serverIpAddr, int port , string databaseIpAddr, string user, string passWord, string databaseName,
               int log_write , int opt_linger, int trigmode, int sql_num,
               int thread_num, int close_log, int actor_model);
 
@@ -42,6 +42,7 @@ public:
 
 public:
     // 基础
+    string m_serverIpAddr;
     int m_port;
     char *m_root;
     int m_log_write;
@@ -54,6 +55,7 @@ public:
 
     // 数据库相关
     ConnectionPool *m_connPool;
+    string m_databaseIpAddr;            // 数据库 ip 地址
     string m_user;                      // 登陆数据库用户名
     string m_passWord;                  // 登陆数据库密码
     string m_databaseName;              // 使用数据库名

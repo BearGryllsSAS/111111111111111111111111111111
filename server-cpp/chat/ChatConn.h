@@ -34,13 +34,7 @@ class ChatConn
 public:
     int cb_fun;
 
-public:
     static const char ms1[];
-
-public:
-    typedef std::function<void()> call_back;
-
-public:
      long m_read_idx;
      static const int BUFFER_SIZE = 2048;
 
@@ -85,40 +79,15 @@ private:
 
 public:
     int fd;                     // 监听的文件描述符
-    int events;                 // 对应监听的事件 EPOLLIN / EPOLLOUT
-    // call_back fun;              // 回调函数
-    void *arg;                  // 上面回调函数的参3
-    int status;                 // 是否在监听红黑树上, 1 --- 在, 0 --- 不在
     char buf[BUFFER_SIZE];           // 读写缓冲区
     int len;                    // 本次从客户端读入缓冲区数据的长度
-    long long last_active_time; // 该文件描述符最后在监听红黑树上的活跃时间
     int log_step;               // 标记用户位于登陆的操作 0-- 未登陆  1 --- 输入账号  2 ---- 输入密码   3----- 成功登陆  4 --- 注册用户名  5 ------ 输入注册的密码   6 ------- 再次输入密码验证
 
     char usr_id[8];            // 用户ID    五位 UID
     char usr_name[256];        // 用户名
     char usr_key[40];          // 用户密码
-    int  st;                   // 是否在线 0---- 离线     1---- 在线
 
 public:
-
-    // 出错处理函数
-    void sys_error(const char *str); 
-
-    // 重新设置监听事件
-    // void event_set(myevent_s *ev, int fd, int events, call_back fun, void *arg3);
-
-    // 添加监听事件到树上
-    // void event_add(int epfd, myevent_s *ev);
-
-    // 将事件从监听红黑树上摘除
-    // void event_del(int epfd, myevent_s *ev);
-
-    // 关闭与客户端通信的文件描述符
-    // void close_cfd(int cfd, myevent_s *ev);
-
-    // 监听新的客户端建立连接
-    // void cb_accept(int lfd, void * arg);
-
     // 登陆界面
     void login_menu();
 
